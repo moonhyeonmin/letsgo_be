@@ -1,0 +1,70 @@
+# --- Build outputs ---
+/target/
+/build/
+/out/
+**/build/
+
+# --- Logs & temp ---
+*.log
+logs/
+*.out
+*.err
+hs_err_pid*
+replay_*.log
+*.hprof
+*.stackdump
+
+# --- Maven/Gradle ---
+.mvn/timing.properties
+# Maven wrapper & scripts는 커밋해야 빌드가 쉬워요 (ignore 하지 않음)
+# mvnw, mvnw.cmd, .mvn/wrapper/** 포함
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# --- Spring Boot local configs & secrets ---
+.env
+.env.*
+application.*
+application.yml
+application.properties
+application-secrets.yml
+application-*.secrets.yml
+
+# --- Keys / certs ---
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+*.crt
+
+# --- Test reports & coverage ---
+surefire-reports/
+failsafe-reports/
+jacoco.exec
+jacoco-report/
+coverage/
+test-output/
+pitest-reports/
+
+# --- IDE / Editors ---
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.project
+.classpath
+.settings/
+bin/
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- (선택) 혹시 repo에 프런트 폴더가 같이 있다면 ---
+node_modules/
+*.tsbuildinfo
+
+# --- Docker (선택) ---
+docker-compose.override.yml
