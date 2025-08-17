@@ -1,6 +1,7 @@
 package com.onboarder.onboarder.dto.jobpost;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,12 +13,12 @@ public class JobPostCreateRequestDto {
 
     private String title;
     private String content;
-    private String companyName;
+    private String company;
     private String location;
     private String position;
-    private String company_size;
-    private String industry;
     private String salary;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deadline;
     private String requirements;
+    private String source_url;
 }
