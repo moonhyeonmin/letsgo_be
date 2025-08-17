@@ -28,11 +28,8 @@ public class AuthService {
     public String login(LoginRequestDto loginRequestDto) {
 
         // 이메일로 사용자 조회
-        User user = userRepository.findByEmail(loginRequestDto.getEmail());
-
-        if (user == null) {
-            throw new IllegalArgumentException("존재하지 않는 이메일입니다.");
-        }
+        User user = userRepository.findByEmail(loginRequestDto.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("해당 이메일의 사용자가 존재하지 않습니다."));
 
         // 비밀번호 일치 확인
         if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {

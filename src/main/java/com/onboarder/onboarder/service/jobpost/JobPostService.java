@@ -2,6 +2,7 @@ package com.onboarder.onboarder.service.jobpost;
 
 
 import com.onboarder.onboarder.domain.jobpost.JobPost;
+import com.onboarder.onboarder.dto.jobpost.JobPostCreateRequestDto;
 import com.onboarder.onboarder.dto.jobpost.JobPostResponseDto;
 import com.onboarder.onboarder.repository.JobPostRepository;
 import lombok.RequiredArgsConstructor;
@@ -68,5 +69,24 @@ public class JobPostService {
                 .stream()
                 .map(JobPostResponseDto::new)
                 .toList();
+    }
+
+    @Transactional
+    public JobPostResponseDto createJobPost(JobPostCreateRequestDto requestDto) {
+        // 채용 공고 생성
+        JobPost jobPost = JobPost.builder()
+                .title(requestDto.getTitle())
+                .content(requestDto.getContent())
+                .company(requestDto.getCompany())
+                .location(requestDto.getLocation())
+                .position(requestDto.getPosition())
+                .salary(requestDto.getSalary())
+                .deadline(requestDto.getDeadline())
+                .requirements(requestDto.getRequirements())
+                .source_url(requestDto.getSource_url())
+                .build();
+
+        JobPost savedJobPost = jobPostRepository.save(jobPost);
+        return new JobPostResponseDto(savedJobPost);
     }
 }

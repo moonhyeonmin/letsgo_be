@@ -3,10 +3,12 @@ package com.onboarder.onboarder.dto.jobpost;
 import com.onboarder.onboarder.domain.jobpost.JobPost;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class JobPostResponseDto {
 

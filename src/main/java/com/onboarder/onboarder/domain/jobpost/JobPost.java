@@ -23,9 +23,6 @@ public class JobPost {
     private int job_posting_id;
 
     @Column(nullable = false)
-    private int company_id;
-
-    @Column(nullable = false)
     private String company;
 
     @Column(nullable = false)
@@ -53,12 +50,11 @@ public class JobPost {
     private String source_url;
 
     @Builder
-    public JobPost(int job_posting_id, int company_id, String title, String position, String requirements,
+    public JobPost(int job_posting_id, String title, String position, String requirements,
                    String location, String salary, LocalDateTime deadline, String source_url, String company, String content) {
         this.company = company;
         this.content = content;
         this.job_posting_id = job_posting_id;
-        this.company_id = company_id;
         this.title = title;
         this.position = position;
         this.requirements = requirements;
