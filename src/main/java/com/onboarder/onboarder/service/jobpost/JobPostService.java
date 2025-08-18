@@ -47,10 +47,11 @@ public class JobPostService {
     }
 
     @Transactional(readOnly = true)
-    public JobPostResponseDto getJobPostByTitle(String title) {
+    public List<JobPostResponseDto> getJobPostByTitle(String title) {
         return jobPostRepository.findByTitle(title)
+                .stream()
                 .map(JobPostResponseDto::new)
-                .orElseThrow(() -> new IllegalArgumentException("해당 제목의 채용 공고가 존재하지 않습니다."));
+                .toList();
     }
 
     @Transactional(readOnly = true)
