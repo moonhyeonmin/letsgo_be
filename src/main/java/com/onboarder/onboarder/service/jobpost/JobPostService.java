@@ -26,13 +26,10 @@ public class JobPostService {
     }
 
     @Transactional(readOnly = true)
-    public JobPostResponseDto getJobPostById(int id) {
+    public JobPostResponseDto getJobPostById(int jobPostId) {
         // ID로 채용공고를 조회
-        JobPost jobPost = jobPostRepository.findById(id);
-
-        if (jobPost == null) {
-            throw new IllegalArgumentException("해당 ID의 채용 공고가 존재하지 않습니다.");
-        }
+        JobPost jobPost = jobPostRepository.findById(jobPostId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 채용 공고가 존재하지 않습니다."));
 
         return new JobPostResponseDto(jobPost);
     }
