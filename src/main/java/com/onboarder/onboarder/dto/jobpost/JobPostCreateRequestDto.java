@@ -2,6 +2,7 @@ package com.onboarder.onboarder.dto.jobpost;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.onboarder.onboarder.domain.company.Company;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +14,7 @@ public class JobPostCreateRequestDto {
 
     private String title;
     private String content;
-    private String company;
+    private Company company;
     private String location;
     private String position;
     private String salary;

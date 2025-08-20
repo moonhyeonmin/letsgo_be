@@ -1,5 +1,6 @@
 package com.onboarder.onboarder.domain.jobpost;
 
+import com.onboarder.onboarder.domain.company.Company;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,10 +21,12 @@ public class JobPost {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int job_posting_id;
+    @Column(name = "job_posting_id")
+    private int jobPostId;
 
-    @Column(nullable = false)
-    private String company;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 
     @Column(nullable = false)
     private String content;
@@ -50,11 +53,11 @@ public class JobPost {
     private String source_url;
 
     @Builder
-    public JobPost(int job_posting_id, String title, String position, String requirements,
-                   String location, String salary, LocalDateTime deadline, String source_url, String company, String content) {
+    public JobPost(int jobPostId, String title, String position, String requirements,
+                   String location, String salary, LocalDateTime deadline, String source_url, Company company, String content) {
         this.company = company;
         this.content = content;
-        this.job_posting_id = job_posting_id;
+        this.jobPostId = jobPostId;
         this.title = title;
         this.position = position;
         this.requirements = requirements;

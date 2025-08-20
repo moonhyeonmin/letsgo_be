@@ -1,6 +1,7 @@
 package com.onboarder.onboarder.service.jobpost;
 
 
+import com.onboarder.onboarder.domain.company.Company;
 import com.onboarder.onboarder.domain.jobpost.JobPost;
 import com.onboarder.onboarder.dto.jobpost.JobPostCreateRequestDto;
 import com.onboarder.onboarder.dto.jobpost.JobPostResponseDto;
@@ -37,7 +38,7 @@ public class JobPostService {
     @Transactional(readOnly = true)
     public List<JobPostResponseDto> getJobPostsByCompany(String company) {
         // 회사 이름으로 채용 공고를 조회
-        return jobPostRepository.findByCompany(company)
+        return jobPostRepository.findByCompany_Name(company)
                 .stream()
                 .map(JobPostResponseDto::new)
                 .toList();

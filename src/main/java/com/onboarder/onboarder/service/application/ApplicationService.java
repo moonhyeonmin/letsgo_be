@@ -2,6 +2,7 @@ package com.onboarder.onboarder.service.application;
 
 
 import com.onboarder.onboarder.domain.application.Application;
+import com.onboarder.onboarder.domain.application.ApplicationQuestion;
 import com.onboarder.onboarder.domain.jobpost.JobPost;
 import com.onboarder.onboarder.domain.user.User;
 import com.onboarder.onboarder.dto.application.ApplicationRequestDto;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +37,21 @@ public class ApplicationService {
         Application application = Application.builder()
                 .user(user)
                 .jobPost(jobPost)
+                .status(requestDto.getStatus())
+                .memo(requestDto.getMemo())
+                .is_result_success(requestDto.is_result_success())
                 .build();
+
+        // 3. 질문 답변 엔티티 생성 및 리스트에 추가
+        List<ApplicationQuestion> questions = requestDto.getQuestions().stream()
+                        .map(applicationQuestionDto -> ApplicationQuestion.builder()
+                                .question(applicationQuestionDto.getQuestion())
+                        .answer(applicationQuestionDto.getAnswer())
+                                .application(application)
+                                .build())
+                                .toList();
+
+        application.addQuestions(questions);
 
         applicationRepository.save(application);
     }
