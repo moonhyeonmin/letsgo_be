@@ -20,10 +20,10 @@ public class JobPostResponseDto {
     private String content;
 
     public JobPostResponseDto(JobPost jobPost) {
-        this.id = jobPost.getJob_posting_id();
+        this.id = jobPost.getJobPostId();
         this.title = jobPost.getTitle();
         this.content = jobPost.getContent();
-        this.company = jobPost.getCompany();
+        this.company = jobPost.getCompany().getName();
         this.location = jobPost.getLocation();
         this.position = jobPost.getPosition();
     }

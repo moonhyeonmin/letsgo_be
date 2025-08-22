@@ -10,9 +10,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -45,10 +47,13 @@ public class SecurityConfig {
         // 회원가입 엔드포인트는 인증 없이 접근 허용, 이외의 모든 요청은 인증 필요
         http
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 보호 비활성화
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/users/signup", "/api/auth/login", "/api/jobs/**").permitAll() // 회원가입 엔드포인트 허용
+                        .requestMatchers("/api/users/signup", "/api/auth/login", "/api/jobs/**").permitAll()// 회원가입 엔드포인트 허용
                         .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 );
+
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

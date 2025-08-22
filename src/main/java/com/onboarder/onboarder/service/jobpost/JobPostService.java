@@ -1,9 +1,11 @@
 package com.onboarder.onboarder.service.jobpost;
 
 
+import com.onboarder.onboarder.domain.company.Company;
 import com.onboarder.onboarder.domain.jobpost.JobPost;
 import com.onboarder.onboarder.dto.jobpost.JobPostCreateRequestDto;
 import com.onboarder.onboarder.dto.jobpost.JobPostResponseDto;
+import com.onboarder.onboarder.repository.CompanyRepository;
 import com.onboarder.onboarder.repository.JobPostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.List;
 public class JobPostService {
 
     private final JobPostRepository jobPostRepository;
+    private final CompanyRepository companyRepository;
 
     @Transactional(readOnly = true)
     public List<JobPostResponseDto> getJobPosts() {
@@ -26,13 +29,10 @@ public class JobPostService {
     }
 
     @Transactional(readOnly = true)
-    public JobPostResponseDto getJobPostById(int id) {
+    public JobPostResponseDto getJobPostById(int jobPostId) {
         // ID로 채용공고를 조회
-        JobPost jobPost = jobPostRepository.findById(id);
-
-        if (jobPost == null) {
-            throw new IllegalArgumentException("해당 ID의 채용 공고가 존재하지 않습니다.");
-        }
+        JobPost jobPost = jobPostRepository.findById(jobPostId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 채용 공고가 존재하지 않습니다."));
 
         return new JobPostResponseDto(jobPost);
     }
@@ -40,7 +40,7 @@ public class JobPostService {
     @Transactional(readOnly = true)
     public List<JobPostResponseDto> getJobPostsByCompany(String company) {
         // 회사 이름으로 채용 공고를 조회
-        return jobPostRepository.findByCompany(company)
+        return jobPostRepository.findByCompany_Name(company)
                 .stream()
                 .map(JobPostResponseDto::new)
                 .toList();
@@ -75,10 +75,14 @@ public class JobPostService {
     @Transactional
     public JobPostResponseDto createJobPost(JobPostCreateRequestDto requestDto) {
         // 채용 공고 생성
+
+        Company company = companyRepository.findById(requestDto.getCompanyId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 회사 ID가 존재하지 않습니다."));
+
         JobPost jobPost = JobPost.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
-                .company(requestDto.getCompany())
+                .company(company)
                 .location(requestDto.getLocation())
                 .position(requestDto.getPosition())
                 .salary(requestDto.getSalary())
