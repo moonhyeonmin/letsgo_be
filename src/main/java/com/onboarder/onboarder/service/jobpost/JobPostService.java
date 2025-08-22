@@ -5,6 +5,7 @@ import com.onboarder.onboarder.domain.company.Company;
 import com.onboarder.onboarder.domain.jobpost.JobPost;
 import com.onboarder.onboarder.dto.jobpost.JobPostCreateRequestDto;
 import com.onboarder.onboarder.dto.jobpost.JobPostResponseDto;
+import com.onboarder.onboarder.repository.CompanyRepository;
 import com.onboarder.onboarder.repository.JobPostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 public class JobPostService {
 
     private final JobPostRepository jobPostRepository;
+    private final CompanyRepository companyRepository;
 
     @Transactional(readOnly = true)
     public List<JobPostResponseDto> getJobPosts() {
@@ -73,10 +75,14 @@ public class JobPostService {
     @Transactional
     public JobPostResponseDto createJobPost(JobPostCreateRequestDto requestDto) {
         // 채용 공고 생성
+
+        Company company = companyRepository.findById(requestDto.getCompanyId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 회사 ID가 존재하지 않습니다."));
+
         JobPost jobPost = JobPost.builder()
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
-                .company(requestDto.getCompany())
+                .company(company)
                 .location(requestDto.getLocation())
                 .position(requestDto.getPosition())
                 .salary(requestDto.getSalary())

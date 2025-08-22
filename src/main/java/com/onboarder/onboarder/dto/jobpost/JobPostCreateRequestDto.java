@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class JobPostCreateRequestDto {
 
+    private int companyId;
     private String title;
     private String content;
-    private Company company;
     private String location;
     private String position;
     private String salary;

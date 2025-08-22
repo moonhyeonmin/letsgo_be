@@ -12,4 +12,10 @@ public class MemberCreateRequestDto {
     private String password;
     private String nickname;
 
+    public MemberCreateRequestDto(String email, String password, String nickname) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+    }
+
 }

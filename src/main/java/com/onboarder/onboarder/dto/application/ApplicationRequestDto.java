@@ -1,5 +1,6 @@
 package com.onboarder.onboarder.dto.application;
 
+import com.onboarder.onboarder.domain.application.ApplicationStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,8 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 public class ApplicationRequestDto {
     private int jobPostId;
-    private String status;
+    private ApplicationStatus status;
     private String memo;
     private List<ApplicationQuestionDto> questions;
-    private boolean is_result_success;
+    private boolean isResulSuccess;
 }

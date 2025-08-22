@@ -3,6 +3,7 @@ package com.onboarder.onboarder.controller;
 
 import com.onboarder.onboarder.domain.application.Application;
 import com.onboarder.onboarder.dto.application.ApplicationRequestDto;
+import com.onboarder.onboarder.dto.application.ApplicationResponseDto;
 import com.onboarder.onboarder.service.application.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,14 +29,14 @@ public class ApplicationController {
      * @return HTTP 상태 코드 201 Created
      */
     @PostMapping
-    public ResponseEntity<Void> applyToJobPost(
+    public ResponseEntity<ApplicationResponseDto> applyToJobPost(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody ApplicationRequestDto requestDto) {
 
         String userEmail = userDetails.getUsername();
-        applicationService.applyToJobPost(requestDto, userEmail);
+        ApplicationResponseDto applicationResponseDto = applicationService.applyToJobPost(requestDto, userEmail);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(applicationResponseDto, HttpStatus.CREATED);
     }
 
     /**
@@ -61,7 +62,7 @@ public class ApplicationController {
      * @param status  지원 상태
      * @return HTTP 상태 코드 200 OK와 상태별 지원한 채용 공고 목록
      */
-    @GetMapping("/user/{userId}/satus")
+    @GetMapping("/user/{userId}/status")
     public ResponseEntity<List<Application>> getApplicationsByUserAndStatus(
             @PathVariable int userId,
             @RequestParam String status,

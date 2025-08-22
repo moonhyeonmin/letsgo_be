@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 보호 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/users/signup", "/api/auth/login", "/api/jobs/**").permitAll() // 회원가입 엔드포인트 허용
+                        .requestMatchers("/api/users/signup", "/api/auth/login", "/api/jobs/**").permitAll()// 회원가입 엔드포인트 허용
                         .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 );
 

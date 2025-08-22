@@ -6,11 +6,13 @@ import com.onboarder.onboarder.domain.application.ApplicationQuestion;
 import com.onboarder.onboarder.domain.jobpost.JobPost;
 import com.onboarder.onboarder.domain.user.User;
 import com.onboarder.onboarder.dto.application.ApplicationRequestDto;
+import com.onboarder.onboarder.dto.application.ApplicationResponseDto;
 import com.onboarder.onboarder.repository.ApplicationRepository;
 import com.onboarder.onboarder.repository.JobPostRepository;
 import com.onboarder.onboarder.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +26,8 @@ public class ApplicationService {
     private final JobPostRepository jobPostRepository;
 
     // 유저가 공고에 지원했는지 확인하고 기록
-    public void applyToJobPost(ApplicationRequestDto requestDto, String userEmail) {
+    @Transactional
+    public ApplicationResponseDto applyToJobPost(ApplicationRequestDto requestDto, String userEmail) {
         // 1. 유효성 검증 : 사용자, 공고 존재 여부 확인
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -32,6 +35,12 @@ public class ApplicationService {
         JobPost jobPost = jobPostRepository.findById(requestDto.getJobPostId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID의 채용 공고가 존재하지 않습니다."));
 
+        // 이미 지원한 공고인지 확인
+        if (applicationRepository.findAllByUserAndJobPost(user, jobPost)
+                .map(list -> !list.isEmpty())
+                .orElse(false)) {
+            throw new IllegalArgumentException("이미 지원한 채용 공고입니다.");
+        }
 
         // 2. 지원 상태 설정
         Application application = Application.builder()
@@ -39,7 +48,7 @@ public class ApplicationService {
                 .jobPost(jobPost)
                 .status(requestDto.getStatus())
                 .memo(requestDto.getMemo())
-                .is_result_success(requestDto.is_result_success())
+                .isResulSuccess(requestDto.isResulSuccess())
                 .build();
 
         // 3. 질문 답변 엔티티 생성 및 리스트에 추가
@@ -54,10 +63,13 @@ public class ApplicationService {
         application.addQuestions(questions);
 
         applicationRepository.save(application);
+
+        return new ApplicationResponseDto(application);
     }
 
 
     // 유저가 지원한 채용 공고를 조회
+    @Transactional(readOnly = true)
     public List<Application> getApplicationsByUser(int userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));

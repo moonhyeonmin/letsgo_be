@@ -18,6 +18,15 @@ public class JobPostController {
     private final JobPostService jobPostService;
 
     /**
+     * Post api/jobs - 새로운 공고 등록
+     */
+    @PostMapping
+    public ResponseEntity<JobPostResponseDto> createJobPost(@RequestBody JobPostCreateRequestDto requestDto) {
+        JobPostResponseDto createdJobPost = jobPostService.createJobPost(requestDto);
+        return new ResponseEntity<>(createdJobPost, HttpStatus.CREATED);
+    }
+
+    /**
      * GET /api/jobs - 전체 공고 목록 조회
      */
     @GetMapping
@@ -33,15 +42,6 @@ public class JobPostController {
     public ResponseEntity<JobPostResponseDto> getJobPostById(@PathVariable int id) {
         JobPostResponseDto jobPost = jobPostService.getJobPostById(id);
         return ResponseEntity.ok(jobPost);
-    }
-
-    /**
-     * Post api/jobs - 새로운 공고 등록
-     */
-    @PostMapping
-    public ResponseEntity<JobPostResponseDto> createJobPost(@RequestBody JobPostCreateRequestDto requestDto) {
-        JobPostResponseDto createdJobPost = jobPostService.createJobPost(requestDto);
-        return new ResponseEntity<>(createdJobPost, HttpStatus.CREATED);
     }
 
     /**
