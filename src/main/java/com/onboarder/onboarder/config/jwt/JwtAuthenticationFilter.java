@@ -39,7 +39,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            // 로그를 남기거나 예외 처리 로직을 추가할 수 있습니다.
+            // 예외 처리 로그 기록
+            logger.error("토큰 에러", e);
         }
 
         filterChain.doFilter(request, response);

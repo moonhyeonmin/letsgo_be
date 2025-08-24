@@ -18,6 +18,7 @@ public class JobPostResponseDto {
     private String location;
     private String position;
     private String content;
+    private LocalDateTime deadline;
 
     public JobPostResponseDto(JobPost jobPost) {
         this.id = jobPost.getJobPostId();
@@ -26,5 +27,6 @@ public class JobPostResponseDto {
         this.company = jobPost.getCompany().getName();
         this.location = jobPost.getLocation();
         this.position = jobPost.getPosition();
+        this.deadline = jobPost.getDeadline();
     }
 }

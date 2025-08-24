@@ -48,7 +48,6 @@ public class ApplicationService {
                 .jobPost(jobPost)
                 .status(requestDto.getStatus())
                 .memo(requestDto.getMemo())
-                .isResulSuccess(requestDto.isResulSuccess())
                 .build();
 
         // 3. 질문 답변 엔티티 생성 및 리스트에 추가
