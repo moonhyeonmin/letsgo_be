@@ -13,5 +13,4 @@ public class ApplicationRequestDto {
     private ApplicationStatus status;
     private String memo;
     private List<ApplicationQuestionDto> questions;
-    private boolean isResulSuccess;
 }
