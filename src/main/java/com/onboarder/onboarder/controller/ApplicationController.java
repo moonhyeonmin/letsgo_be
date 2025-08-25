@@ -2,9 +2,11 @@ package com.onboarder.onboarder.controller;
 
 
 import com.onboarder.onboarder.domain.application.Application;
+import com.onboarder.onboarder.dto.application.ApplicationQuestionDto;
 import com.onboarder.onboarder.dto.application.ApplicationRequestDto;
 import com.onboarder.onboarder.dto.application.ApplicationResponseDto;
 import com.onboarder.onboarder.service.application.ApplicationService;
+import com.onboarder.onboarder.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,33 +47,28 @@ public class ApplicationController {
      * @return HTTP 상태 코드 200 OK와 지원한 채용 공고 목록
      */
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Application>> getApplicationsByUser(
-            @PathVariable int userId,
+    @GetMapping("/my")
+    public ResponseEntity<List<ApplicationResponseDto>> getMyApplications(
             @AuthenticationPrincipal UserDetails userDetails) {
 
-        List<Application> applicationsByUser = applicationService.getApplicationsByUser(userId);
 
-        return new ResponseEntity<>(applicationsByUser, HttpStatus.OK);
+        String userEmail = userDetails.getUsername();
+        return ResponseEntity.ok(applicationService.getApplicationByEmail(userEmail));
     }
 
     /**
      * 유저가 지원한 채용 공고를 상태별로 조회하는 API
      *
-     * @param userId  유저 ID
      * @param status  지원 상태
      * @return HTTP 상태 코드 200 OK와 상태별 지원한 채용 공고 목록
      */
-    @GetMapping("/user/{userId}/status")
-    public ResponseEntity<List<Application>> getApplicationsByUserAndStatus(
-            @PathVariable int userId,
+    @GetMapping("/my/status")
+    public ResponseEntity<List<ApplicationResponseDto>> getApplicationsByUserAndStatus(
             @RequestParam String status,
             @AuthenticationPrincipal UserDetails userDetails) {
 
         String userEmail = userDetails.getUsername();
-        List<Application> applicationsByUserAndStatus = applicationService.getApplicationsByUserAndStatus(userId, status);
-
-        return new ResponseEntity<>(applicationsByUserAndStatus, HttpStatus.OK);
+        return ResponseEntity.ok(applicationService.getApplicationsByEmailAndStatus(userEmail, status));
     }
 
     /**
@@ -82,15 +79,11 @@ public class ApplicationController {
      * @return HTTP 상태 코드 200 OK와 채용 공고 목록
      */
     @GetMapping("/user/{userId}/jobpost/{jobPostId}")
-    public ResponseEntity<List<Application>> getApplicationsByUserAndJobPostId(
+    public ResponseEntity<List<ApplicationResponseDto>> getApplicationsByUserAndJobPostId(
             @PathVariable int userId,
             @PathVariable int jobPostId,
             @AuthenticationPrincipal UserDetails userDetails) {
 
-
-        List<Application> applicationsByUserAndJobPostId = applicationService.getApplicationsByUserAndJobPostId(userId, jobPostId);
-
-
-        return new ResponseEntity<>(applicationsByUserAndJobPostId, HttpStatus.OK);
+        return ResponseEntity.ok(applicationService.getApplicationsByUserAndJobPostId(userId, jobPostId));
     }
 }
