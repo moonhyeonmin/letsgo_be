@@ -69,13 +69,16 @@ public class ApplicationService {
 
     // 유저가 지원한 채용 공고를 조회
     @Transactional(readOnly = true)
-    public List<Application> getApplicationsByUser(int userId) {
+    public List<ApplicationResponseDto> getApplicationsByUser(int userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         // 유저가 지원한 채용 공고를 조회
         return applicationRepository.findAllByUser(user)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 지원한 채용 공고가 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 지원한 채용 공고가 없습니다."))
+                .stream()
+                .map(ApplicationResponseDto::new)
+                .collect(Collectors.toList());
     }
 
     // 유저가 지원한 채용 공고를 상태별로 조회
@@ -89,7 +92,7 @@ public class ApplicationService {
     }
 
     // 유저가 지원한 채용 공고를 채용 공고 ID로 조회
-    public List<Application> getApplicationsByUserAndJobPostId(int userId, int jobPostId) {
+    public List<ApplicationResponseDto> getApplicationsByUserAndJobPostId(int userId, int jobPostId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
@@ -98,6 +101,35 @@ public class ApplicationService {
 
         // 유저가 지원한 채용 공고를 채용 공고 ID로 조회
         return applicationRepository.findAllByUserAndJobPost(user, jobPost)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 지원한 채용 공고가 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 지원한 채용 공고가 없습니다."))
+                .stream()
+                .map(ApplicationResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    // 이메일로 유저가 지원한 채용 공고를 조회
+    @Transactional(readOnly = true)
+    public List<ApplicationResponseDto> getApplicationByEmail(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        // 유저가 지원한 채용 공고를 조회
+        return applicationRepository.findAllByUser(user)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 지원한 채용 공고가 없습니다."))
+                .stream()
+                .map(ApplicationResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    // 이메일로 유저가 지원한 채용 공고를 상태별로 조회
+    public List<ApplicationResponseDto> getApplicationsByEmailAndStatus(String userEmail, String status) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        return applicationRepository.findAllByUserAndStatus(user, status)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 지원한 채용 공고가 없습니다."))
+                .stream()
+                .map(ApplicationResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
