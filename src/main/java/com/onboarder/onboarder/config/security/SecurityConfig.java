@@ -72,7 +72,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // CORS preflight 요청 허용
-                        .requestMatchers("/api/users/signup", "/api/auth/login", "/api/jobs/**").permitAll()// 회원가입 엔드포인트 허용
+                        .requestMatchers("/api/users/signup", "api/users/onboarding", "/api/auth/login", "/api/jobs/**").permitAll()// 회원가입 엔드포인트 허용
                         .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 );
 

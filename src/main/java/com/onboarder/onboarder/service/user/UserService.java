@@ -39,6 +39,16 @@ public class UserService {
                 .email(requestDto.getEmail())
                 .password(passwordEncoder.encode(requestDto.getPassword())) // 비밀번호 암호화
                 .nickname(requestDto.getNickname())
+                .name(requestDto.getName())
+                .phone(requestDto.getPhone())
+                .location(requestDto.getLocation())
+                .experience(requestDto.getExperience())
+                .position(requestDto.getPosition())
+                .bio(requestDto.getBio())
+                .skills(requestDto.getSkills())
+                .education(requestDto.getEducation())
+                .company(requestDto.getCompany())
+                .completed(requestDto.isCompleted())
                 .build();
 
         userRepository.save(newUser);
