@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -36,7 +37,7 @@ public class UserProfileDto {
         this.experience = user.getExperience();
         this.position = user.getPosition();
         this.bio = user.getBio();
-        this.skills = user.getSkills();
+        this.skills = new ArrayList<>(user.getSkills());
         this.education = user.getEducation();
         this.company = user.getCompany();
         this.createdAt = user.getCreatedAt();

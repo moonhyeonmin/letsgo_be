@@ -20,4 +20,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 
     // 유저가 지원한 채용 공고를 채용 공고 ID로 조회
     Optional<List<Application>> findAllByUserAndJobPost(User user, JobPost jobPost);
+
+    // 유저가 지원한 공고의 개수를 조회
+    int countByUser(User user);
 }

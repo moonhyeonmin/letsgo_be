@@ -70,7 +70,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
-        this.completed = completed;
+        this.completed = completed != null ? completed : false;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.name = name;

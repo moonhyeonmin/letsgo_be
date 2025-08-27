@@ -1,5 +1,6 @@
 package com.onboarder.onboarder.controller;
 
+import com.onboarder.onboarder.dto.profile.ProfileStatsDto;
 import com.onboarder.onboarder.dto.profile.ProfileUpdateRequestDto;
 import com.onboarder.onboarder.dto.profile.UserProfileDto;
 import com.onboarder.onboarder.service.profile.ProfileService;
@@ -32,8 +33,8 @@ public class ProfileController {
     }
 
     @GetMapping("/stats")
-    public ResponseEntity<?> getProfileStats(@AuthenticationPrincipal UserDetails userDetails) {
-//        ProfileStatsDto stats = profileService.getProfileStats(userDetails.getUsername());
-        return ResponseEntity.ok().build(); // stats 대신 빈 응답 반환
+    public ResponseEntity<ProfileStatsDto> getProfileStats(@AuthenticationPrincipal UserDetails userDetails) {
+        ProfileStatsDto stats = profileService.getProfileStats(userDetails.getUsername());
+        return ResponseEntity.ok(stats); // stats 대신 빈 응답 반환
     }
 }

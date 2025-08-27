@@ -2,6 +2,7 @@ package com.onboarder.onboarder.service.profile;
 
 import com.onboarder.onboarder.domain.user.User;
 import com.onboarder.onboarder.dto.profile.OnboardingStatusDto;
+import com.onboarder.onboarder.dto.profile.ProfileStatsDto;
 import com.onboarder.onboarder.dto.profile.ProfileUpdateRequestDto;
 import com.onboarder.onboarder.dto.profile.UserProfileDto;
 import com.onboarder.onboarder.repository.ApplicationRepository;
@@ -24,6 +25,8 @@ public class ProfileService {
     public UserProfileDto getUserProfile(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        user.getSkills().size();
         return new UserProfileDto(user);
     }
 
@@ -40,7 +43,7 @@ public class ProfileService {
                 requestDto.getExperience(),
                 requestDto.getPosition(),
                 requestDto.getBio(),
-                new ArrayList<>(user.getSkills()),
+                requestDto.getSkills(),
                 requestDto.getEducation(),
                 requestDto.getCompany()
         );
@@ -62,17 +65,17 @@ public class ProfileService {
     }
 
 
-//    @Transactional(readOnly = true)
-//    public ProfileStatsDto getProfileStats(String userEmail) {
-//        User user = userRepository.findByEmail(userEmail)
-//                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-//
-//        // 통계 데이터 계산 (임시 로직)
-//        long totalApplications = applicationRepository.countByUser(user);
-//        long documentsPassedCount = 0; // 로직 구현 필요
-//        long interviewsInProgressCount = 0; // 로직 구현 필요
-//        long bookmarksCount = 0; // 로직 구현 필요
-//
-//        return new ProfileStatsDto(totalApplications, documentsPassedCount, interviewsInProgressCount, bookmarksCount);
-//    }
+    @Transactional(readOnly = true)
+    public ProfileStatsDto getProfileStats(String userEmail) {
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        // 통계 데이터 계산 (임시 로직)
+        long totalApplications = applicationRepository.countByUser(user);
+        long documentsPassedCount = 0; // 로직 구현 필요
+        long interviewsInProgressCount = 0; // 로직 구현 필요
+        long bookmarksCount = 0; // 로직 구현 필요
+
+        return new ProfileStatsDto(totalApplications, documentsPassedCount, interviewsInProgressCount, bookmarksCount);
+    }
 }
